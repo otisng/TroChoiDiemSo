@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò chơi Điểm số</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .hidden { display: none; }
+        input, button { margin: 10px; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+        button { background-color: #007bff; color: white; }
+        button:hover { background-color: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+
+        /* Podium Styles */
+        .podium { display: flex; justify-content: center; align-items: flex-end; margin: 20px 0; flex-wrap: wrap; }
+        .rank { width: 120px; margin: 0 10px; text-align: center; border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .rank:hover { transform: scale(1.05); }
+        .rank-1 { background-color: #FFD700; height: 150px; order: 2; }
+        .rank-2 { background-color: #C0C0C0; height: 120px; order: 1; }
+        .rank-3 { background-color: #CD7F32; height: 120px; order: 3; }
+        .rank-other { background-color: #e9ecef; height: 100px; margin-top: 20px; width: 100%; }
+        .rank h3 { margin: 0; font-size: 1.5em; }
+        .rank p { margin: 5px 0; font-size: 1.2em; }
+        .rank .icon { font-size: 2em; }
+        .other-ranks { margin-top: 20px; }
+        .other-ranks ul { list-style: none; padding: 0; }
+        .other-ranks li { padding: 10px; margin: 5px 0; background-color: #fff; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+        /* History Styles */
+        .history-container { display: flex; flex-direction: column; gap: 20px; }
+        .history-card { background-color: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; transition: transform 0.3s; }
+        .history-card:hover { transform: translateY(-5px); }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .history-header h3 { margin: 0; color: #333; }
+        .history-summary { font-size: 0.9em; color: #666; }
+        .history-details { margin-top: 15px; }
+        .history-details table { margin-top: 10px; }
+        .toggle-details { background-color: #28a745; color: white; margin-top: 10px; }
+        .toggle-details:hover { background-color: #218838; }
+        .delete-btn { background-color: #dc3545; color: white; }
+        .delete-btn:hover { background-color: #c82333; }
+        .clear-history { margin-top: 20px; background-color: #ffc107; color: black; }
+        .clear-history:hover { background-color: #e0a800; }
+		
+		/* Updated Setup Styles for Better UI/UX */
+        #setup {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+            transition: transform 0.3s;
+        }
+        #setup:hover { transform: translateY(-5px); }
+        #setup h2 { color: #007bff; text-align: center; margin-bottom: 20px; font-size: 1.8em; }
+        .select-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .select-container::before {
+            content: '👥';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            pointer-events: none;
+        }
+        #numPlayers {
+            width: 100%;
+            padding: 12px 12px 12px 40px; /* Padding left for icon */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #fff;
+            transition: border-color 0.3s;
+        }
+        #numPlayers:focus { border-color: #007bff; outline: none; }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .button-group button {
+            flex: 1;
+            padding: 12px;
+            font-size: 1em;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .button-group button:hover { transform: scale(1.05); }
+        .button-group button:first-child::before { content: '🎮 '; }
+        .button-group button:last-child::before { content: '📜 '; }
+
+        @media (max-width: 600px) {
+            .podium { flex-direction: column; align-items: center; }
+            .rank { width: 100%; margin: 10px 0; }
+            .history-header { flex-direction: column; align-items: flex-start; }
+			#setup { padding: 20px; margin: 10px; }
+            .button-group { flex-direction: column; }
+            .button-group button { margin: 5px 0; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Trò chơi Điểm số</h1>
+
+    <!-- Trang chọn số lượng người chơi -->
+    <div id="setup">
+        <h2>Chọn số lượng người chơi</h2>
+        <select id="numPlayers">
+            <option value="2">2 người</option>
+            <option value="3">3 người</option>
+            <option value="4">4 người</option>
+            <option value="5">5 người</option>
+        </select>
+        <button onclick="startGame()">Bắt đầu</button>
+        <button onclick="viewHistory()">Xem lịch sử</button>
+    </div>
+
+    <!-- Trang nhập tên người chơi -->
+    <div id="names" class="hidden">
+        <h2>Nhập tên người chơi</h2>
+        <div id="nameInputs"></div>
+        <button onclick="submitNames()">Tiếp tục</button>
+    </div>
+
+    <!-- Trang chơi (Rounds) -->
+    <div id="game" class="hidden">
+        <h2>Ván chơi</h2>
+        <table id="scoreTable"></table>
+        <button onclick="nextRound()">Chuyển ván tiếp theo</button>
+        <button onclick="endGame()">Kết thúc trò chơi</button>
+    </div>
+
+    <!-- Trang kết quả -->
+    <div id="results" class="hidden">
+        <h2>Kết quả cuối cùng</h2>
+        <div id="podiumContainer"></div>
+        <div class="other-ranks" id="otherRanks"></div>
+        <button onclick="resetGame()">Chơi lại</button>
+    </div>
+
+    <!-- Lịch sử trò chơi -->
+    <div id="history" class="hidden">
+        <h2>📜Lịch sử trò chơi</h2>
+		<button class="clear-history" onclick="clearAllHistory()">Xóa tất cả lịch sử</button>
+        <button onclick="backToHome()">Quay lại trang chính</button>
+        <div class="history-container" id="historyList"></div>
+        
+    </div>
+
+    <script>
+        let players = [];
+        let scores = [];
+        let round = 1;
+        let gameHistory = JSON.parse(localStorage.getItem('gameHistory')) || [];
+
+        function startGame() {
+            const num = parseInt(document.getElementById('numPlayers').value);
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('names').classList.remove('hidden');
+            const nameInputs = document.getElementById('nameInputs');
+            nameInputs.innerHTML = '';
+            for (let i = 0; i < num; i++) {
+                nameInputs.innerHTML += `<input type="text" placeholder="Tên người chơi ${i+1}" id="player${i}">`;
+            }
+        }
+
+        function submitNames() {
+            const num = parseInt(document.getElementById('numPlayers').value);
+            players = [];
+            for (let i = 0; i < num; i++) {
+                const name = document.getElementById(`player${i}`).value || `Người chơi ${i+1}`;
+                players.push(name);
+                scores.push([]); // Mảng điểm cho mỗi người
+            }
+            document.getElementById('names').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            renderScoreTable();
+        }
+
+        function renderScoreTable() {
+            const table = document.getElementById('scoreTable');
+            table.innerHTML = '';
+            // Hàng tên người chơi
+            let headerRow = '<tr><th>Ván</th>';
+            players.forEach(name => {
+                headerRow += `<th>${name}</th>`;
+            });
+            headerRow += '</tr>';
+            table.innerHTML += headerRow;
+            // Hàng cho ván hiện tại (với input)
+            let currentRow = `<tr><td>Ván ${round}</td>`;
+            players.forEach((_, index) => {
+                currentRow += `<td><input type="number" id="score${index}" placeholder="Điểm"></td>`;
+            });
+            currentRow += '</tr>';
+            table.innerHTML += currentRow;
+        }
+
+        function nextRound() {
+            // Lưu điểm ván hiện tại
+            players.forEach((_, index) => {
+                const score = parseInt(document.getElementById(`score${index}`).value) || 0;
+                scores[index].push(score);
+            });
+            // Chuyển input thành text read-only
+            const table = document.getElementById('scoreTable');
+            const rows = table.rows;
+            const lastRow = rows[rows.length - 1];
+            for (let i = 1; i < lastRow.cells.length; i++) { // Bỏ qua cột "Ván"
+                const input = lastRow.cells[i].querySelector('input');
+                if (input) {
+                    lastRow.cells[i].innerHTML = input.value || '0';
+                }
+            }
+            // Tăng round và thêm hàng mới
+            round++;
+            let newRow = `<tr><td>Ván ${round}</td>`;
+            players.forEach((_, index) => {
+                newRow += `<td><input type="number" id="score${index}" placeholder="Điểm"></td>`;
+            });
+            newRow += '</tr>';
+            table.innerHTML += newRow;
+        }
+
+        function endGame() {
+            // Lưu điểm ván cuối cùng
+            players.forEach((_, index) => {
+                const score = parseInt(document.getElementById(`score${index}`).value) || 0;
+                scores[index].push(score);
+            });
+            // Tính tổng điểm
+            const totals = scores.map(playerScores => playerScores.reduce((a, b) => a + b, 0));
+            // Sắp xếp thứ hạng
+            const ranked = players.map((name, index) => ({ name, total: totals[index] }))
+                .sort((a, b) => b.total - a.total);
+            // Render podium
+            renderPodium(ranked);
+            // Lưu lịch sử
+            const gameData = {
+                time: new Date().toLocaleString(),
+                players: players,
+                scores: scores,
+                totals: totals
+            };
+            gameHistory.push(gameData);
+            localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
+            // Chuyển trang
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        function renderPodium(ranked) {
+            const podiumContainer = document.getElementById('podiumContainer');
+            const otherRanks = document.getElementById('otherRanks');
+            podiumContainer.innerHTML = '';
+            otherRanks.innerHTML = '';
+
+            // Podium cho top 3
+            const podiumRanks = ranked.slice(0, 3);
+            podiumRanks.forEach((player, index) => {
+                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : 'rank-3';
+                const icon = index === 0 ? '🏆' : index === 1 ? '🥈' : '🥉';
+                const title = index === 0 ? 'Nhà vô địch' : index === 1 ? 'Á quân' : 'Hạng ba';
+                podiumContainer.innerHTML += `
+                    <div class="rank ${rankClass}">
+                        <div class="icon">${icon}</div>
+                        <h3>${player.name}</h3>
+                        <p>${player.total} điểm</p>
+                        <p><strong>${title}</strong></p>
+                    </div>
+                `;
+            });
+
+            // Các hạng còn lại
+            if (ranked.length > 3) {
+                otherRanks.innerHTML = '<h3>Các hạng khác</h3><ul>';
+                ranked.slice(3).forEach((player, index) => {
+                    otherRanks.innerHTML += `<li>Hạng ${index + 4}: ${player.name} - ${player.total} điểm</li>`;
+                });
+                otherRanks.innerHTML += '</ul>';
+            }
+        }
+
+        function resetGame() {
+            players = [];
+            scores = [];
+            round = 1;
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('setup').classList.remove('hidden');
+        }
+
+        function showHistory() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            // Sắp xếp theo thời gian gần nhất
+            gameHistory.sort((a, b) => new Date(b.time) - new Date(a.time));
+            gameHistory.forEach((game, index) => {
+                const maxScore = Math.max(...game.totals);
+                const winner = game.players[game.totals.indexOf(maxScore)];
+                historyList.innerHTML += `
+                    <div class="history-card">
+                        <div class="history-header">
+                            <h3>📅 ${game.time}</h3>
+                            <button class="delete-btn" onclick="deleteGame(${index})">Xóa</button>
+                        </div>
+                        <div class="history-summary">
+                            <p>🏆 Người thắng: ${winner} (${maxScore} điểm) | Số người chơi: ${game.players.length}</p>
+                        </div>
+                        <button class="toggle-details" onclick="toggleDetails(${index})">Xem chi tiết điểm</button>
+                        <div class="history-details" id="details-${index}" style="display: none;">
+                            <table>
+                                <tr><th>Tên</th><th>Điểm từng ván</th><th>Tổng điểm</th></tr>
+                                ${game.players.map((name, i) => `<tr><td>${name}</td><td>${game.scores[i].join(', ')}</td><td>${game.totals[i]}</td></tr>`).join('')}
+                            </table>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleDetails(index) {
+            const details = document.getElementById(`details-${index}`);
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function deleteGame(index) {
+            gameHistory.splice(index, 1);
+            localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
+            showHistory();
+        }
+
+        function clearAllHistory() {
+            if (confirm('Bạn có chắc muốn xóa tất cả lịch sử?')) {
+                gameHistory = [];
+                localStorage.removeItem('gameHistory');
+                showHistory();
+            }
+        }
+
+        function backToHome() {
+            document.getElementById('history').classList.add('hidden');
+            document.getElementById('setup').classList.remove('hidden');
+        }
+
+        function viewHistory() {
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('history').classList.remove('hidden');
+            showHistory();
+        }
+    </script>
+</body>
+</html>

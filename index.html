@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò chơi Điểm số Pro</title>
+	<link rel="icon" href="./img/icon.png" type="image/x-icon">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+	<meta property="og:title" content="Trò chơi Điểm số Pro">
+    <meta property="og:description" content="Trò chơi Điểm số Pro">
+    <meta property="og:image" content="./img/icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:width" content="1200">
+	<link href="./styles.css" rel="stylesheet">
+    
+</head>
+<body>
+
+    <div class="container">
+        <div id="setup-screen">
+            <h1>🎲 Thiết lập Game</h1>
+            
+            <h2>1. Số lượng người chơi</h2>
+            <div class="player-count-control">
+                <div class="player-selector">
+                    <div class="player-option" onclick="updateSetupUI(2, this)">2</div>
+                    <div class="player-option" onclick="updateSetupUI(3, this)">3</div>
+                    <div class="player-option active" onclick="updateSetupUI(4, this)">4</div>
+                    <div class="player-option" onclick="updateSetupUI(5, this)">5</div>
+                </div>
+                
+                <div class="custom-count-input">
+                    <label for="customNumPlayers">Hoặc số lượng khác:</label>
+                    <input type="number" id="customNumPlayers" min="2" max="15" value="4" 
+                        onchange="updateSetupUI(parseInt(this.value), null)">
+                </div>
+                <input type="hidden" id="numPlayers" value="4">
+            </div>
+
+            <h2>2. Nhập tên người chơi</h2>
+            <div id="name-inputs-area" class="name-inputs-container">
+                </div>
+
+            <button class="btn-main" onclick="startGame()">
+                <span>▶️ Bắt đầu cuộc chơi</span>
+            </button>
+            
+            <button class="btn-main btn-secondary" onclick="viewHistoryScreen()">
+                📜 Xem lịch sử cũ
+            </button>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <h1>🏆 Bảng Điểm</h1>
+            
+            <div id="input-area" class="input-row"></div>
+            
+            <button class="btn-main btn-add-round" onclick="addRound()">➕ Lưu điểm ván này</button>
+
+            <br>
+            <div class="table-wrapper">
+                <table id="score-table">
+                    <thead>
+                        <tr id="table-header"></tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                    <tfoot>
+                        <tr id="total-row" class="total-row"></tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div id="ranking-area" class="ranking-area">
+                <h3>🥇 Xếp Hạng Tổng Điểm </h3>
+                <ul id="rank-list" class="rank-list"></ul>
+            </div>
+
+            <button class="btn-main btn-end" onclick="resetGame()">🔄 Kết thúc & Chơi lại</button>
+        </div>
+		
+        <div id="history-screen" class="hidden">
+            <h1>📜 Lịch Sử Đấu</h1>
+            <div id="history-list" class="history-list">
+                <p id="no-history-message" class="hidden">Chưa có trận đấu nào được lưu.</p>
+            </div>
+            
+            <button class="btn-main btn-secondary" onclick="backToSetup()">◀️ Quay lại</button>
+            <button class="btn-main btn-end" onclick="clearHistory()">🗑️ Xóa toàn bộ lịch sử</button>
+        </div>
+
+    </div>
+	
+    <script src="./script.js">
+    </script>
+</body>
+</html>

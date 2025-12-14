@@ -1,0 +1,102 @@
+/* --- KHAI BÁO BIẾN & STYLE CHUNG --- */
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary-color: #2196F3;
+            --danger-color: #ff5252;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --gray-border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0; padding: 20px; color: var(--text-color);
+            min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100%; max-width: 500px;
+            text-align: center; margin-top: 10px;
+			
+        }
+
+        h1 { margin-top: 0; color: var(--primary-color); font-size: 1.8rem; }
+        h2 { font-size: 1rem; color: #666; font-weight: 400; margin-bottom: 15px; }
+        .hidden { display: none !important; }
+
+        /* --- STYLES CHO NÚT BẤM CHUNG --- */
+        button.btn-main {
+            width: 100%; padding: 14px;
+            border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 600;
+            cursor: pointer; color: white;
+            background-color: var(--primary-color);
+            transition: 0.2s;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            margin-top: 10px;
+        }
+
+        button.btn-secondary {
+            background-color: white; color: #555; 
+            border: 1px solid var(--gray-border); 
+            box-shadow: none;
+        }
+
+        /* --- SETUP & INPUTS --- */
+        .player-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .player-option { 
+            width: 45px; height: 45px; border-radius: 10px; border: 2px solid var(--gray-border);
+            display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer;
+        }
+        .player-option.active { background-color: var(--primary-color); border-color: var(--primary-color); color: white; }
+        
+        .name-inputs-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; text-align: left; }
+        .name-field { width: 100%; padding: 10px; border: 1px solid var(--gray-border); border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        
+        /* --- GAME & SCOREBOARD --- */
+        .input-row { display: flex; gap: 8px; margin-bottom: 15px; background: #f1f8e9; padding: 15px; border-radius: 12px; overflow-x: auto; border: 1px solid #c5e1a5; justify-content: flex-start; }
+        .input-group { min-width: 80px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+        .input-group label { font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--primary-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+        .score-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-weight: bold; font-size: 16px; box-sizing: border-box; }
+        
+        .table-wrapper { position: relative; overflow-x: auto; border-radius: 12px; border: 1px solid #eee; }
+        #score-table th:first-child, #score-table td:first-child {
+            position: sticky; left: 0; background-color: #f7f7f7; z-index: 2; border-right: 1px solid #ddd;
+        }
+        
+        table { width: 100%; border-collapse: collapse; min-width: 300px; }
+        th, td { padding: 12px 8px; border-bottom: 1px solid #eee; text-align: center; font-size: 14px; }
+        th { background-color: var(--secondary-color); color: white; white-space: nowrap; }
+        .total-row td { font-weight: bold; background-color: #e3f2fd; color: #1565c0; border-top: 2px solid var(--secondary-color); }
+
+        /* --- XẾP HẠNG --- */
+        .ranking-area { margin-top: 30px; padding: 15px; background-color: #e8f5e9; border-radius: 15px; border: 1px solid var(--primary-color); text-align: left; }
+        .ranking-area h3 { text-align: center; color: var(--primary-dark); font-size: 1.2rem; margin-bottom: 15px; }
+        .rank-list { list-style: none; padding: 0; margin: 0; }
+        .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .rank-player-info { font-weight: 600; display: flex; align-items: center; }
+        .rank-score { font-weight: 700; color: var(--primary-dark); font-size: 1.1em; }
+        .rank-medal { font-size: 1.5rem; margin-right: 10px; }
+        .rank-1 .rank-medal { color: gold; }
+        .rank-2 .rank-medal { color: silver; }
+        .rank-3 .rank-medal { color: #cd7f32; }
+
+        /* --- LỊCH SỬ MỚI --- */
+        .history-list { margin-top: 20px; padding: 0; }
+        .history-item { background-color: #f9f9f9; padding: 15px; margin-bottom: 15px; border-radius: 10px; border-left: 5px solid var(--secondary-color); text-align: left; }
+        .history-header { display: flex; justify-content: space-between; font-weight: bold; color: #444; margin-bottom: 8px; font-size: 0.9em; }
+        .history-date { color: #888; font-size: 0.8em; }
+        .history-players { list-style: none; padding: 0; margin-top: 5px; }
+        .history-player-item { display: flex; justify-content: space-between; font-size: 0.9em; padding: 3px 0; border-bottom: 1px dashed #eee; }
+        .history-player-item:last-child { border-bottom: none; }
+        .history-rank-1 { color: var(--primary-dark); font-weight: 700; }
+        #no-history-message { text-align: center; color: #999; padding: 30px; border: 1px dashed #ccc; border-radius: 8px; }
+		
+		
