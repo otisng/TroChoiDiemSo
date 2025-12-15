@@ -13,14 +13,16 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
     <meta property="og:image:width" content="1200">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<link href="./styles.css" rel="stylesheet">
-    
+
 </head>
 <body>
 
     <div class="container">
         <div id="setup-screen">
-            <h1>🎲 Thiết lập Game</h1>
+            <h1 style="font-size: 2rem;">🎲 Thiết lập Game</h1>
             
             <h2>1. Số lượng người chơi</h2>
             <div class="player-count-control">
@@ -53,7 +55,7 @@
         </div>
 
         <div id="game-screen" class="hidden">
-            <h1>🏆 Bảng Điểm</h1>
+            <h1 style="font-size: 2rem;">🏆 Bảng Điểm</h1>
             
             <div id="input-area" class="input-row"></div>
             
@@ -81,7 +83,7 @@
         </div>
 		
         <div id="history-screen" class="hidden">
-            <h1>📜 Lịch Sử Đấu</h1>
+            <h1 style="font-size: 2rem;">📜 Lịch Sử Đấu</h1>
             <div id="history-list" class="history-list">
                 <p id="no-history-message" class="hidden">Chưa có trận đấu nào được lưu.</p>
             </div>
@@ -89,8 +91,34 @@
             <button class="btn-main btn-secondary" onclick="backToSetup()">◀️ Quay lại</button>
             <button class="btn-main btn-end" onclick="clearHistory()">🗑️ Xóa toàn bộ lịch sử</button>
         </div>
-
     </div>
+	<!-- Footer -->
+	<footer class="footer-wrapper">
+		<div class="footer-bg-gradient"></div>
+		<div class="footer-container">
+			<!-- Copyright Section -->
+			<div class="footer-copyright">
+				<p>&copy; 2025 <a href="https://otisng.github.io/Portforlio/" target="_blank" rel="noopener noreferrer">Nexus</a>. Made with <span class="footer-heart">❤</span> in Vietnam</p>
+			</div>
+
+			<!-- Social Links Section -->
+			<div class="footer-social">
+				<a href="https://github.com/otisng" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="footer-social-link footer-social-github">
+					<i class="fab fa-github"></i>
+				</a>
+				<a href="https://www.linkedin.com/in/tinhnd/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="footer-social-link footer-social-linkedin">
+					<i class="fab fa-linkedin-in"></i>
+				</a>
+				<a href="https://fb.com/otis.info" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="footer-social-link footer-social-facebook">
+					<i class="fab fa-facebook"></i>
+				</a>
+				<a href="https://www.instagram.com/otisnguyennn/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="footer-social-link footer-social-instagram">
+					<i class="fab fa-instagram"></i>
+				</a>
+			</div>
+		</div>
+	</footer>
+	    
 	
     <script src="./script.js">
     </script>
